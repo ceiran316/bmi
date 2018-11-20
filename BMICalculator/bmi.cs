@@ -14,7 +14,8 @@ namespace BMICalculator
         const double NormalWeightUpperLimit = 24.9;
         const double OverWeightUpperLimit = 29.9;               // Obese from 30 +
 
-        // conversion factors from imperial to metric
+        // conversion factors from imperial to metr
+
         const double PoundsToKgs = 0.453592;
         const double InchestoMetres = 0.0254;
 
@@ -33,6 +34,22 @@ namespace BMICalculator
         [Display(Name = "Inches")]
         [Range(0, 11, ErrorMessage = "Inches must be between 0 and 11")]                              // 12 inches in a foot
         public int HeightInches { get; set; }
+
+        public BMI()
+        {
+            WeightStones = 0;
+            WeightPounds = 0;
+            HeightFeet = 0;
+            HeightInches = 0;
+        }
+
+        public BMI(int sin, int pin, int fin, int iin)
+        {
+            WeightStones = sin;
+            WeightPounds = pin;
+            HeightFeet = fin;
+            HeightInches = iin;
+        }
 
         // calculate BMI, display to 2 decimal places
         [Display(Name = "Your BMI is")]
@@ -80,6 +97,58 @@ namespace BMICalculator
                 else
                 {
                     return BMICategory.Obese;
+                }
+            }
+        }
+
+        [Display(Name = "Your BMI information summary is: ")]
+        [DisplayFormat(DataFormatString = "{0:F2}")]
+        public String HealthyWeight
+        {
+            get
+            {
+                double totalWeightInPounds = (WeightStones * 14) + WeightPounds;
+                double totalHeightInInches = (HeightFeet * 12) + HeightInches;
+
+                // do conversions to metric
+                double totalWeightInKgs = totalWeightInPounds * PoundsToKgs;
+                double totalHeightInMetres = totalHeightInInches * InchestoMetres;
+
+                double kgToLose = 0;
+                double maxhealthyWeight = 0;
+
+                BMICategory currentCat = this.BMICategory;
+
+                if (currentCat == BMICategory.Obese)
+                {
+                    maxhealthyWeight = NormalWeightUpperLimit * (Math.Pow(totalHeightInMetres, 2));
+                    kgToLose = totalWeightInKgs - maxhealthyWeight;
+
+                    return "\nYour Current weight is " + totalWeightInKgs + "kg"
+                        + "\nIdeal maximum weight for someone " + totalHeightInMetres + "metres is " + maxhealthyWeight + "kg"
+                        + "\nMinimum weight in kilogramms to lose is " + kgToLose;
+                }
+                else if (currentCat == BMICategory.Overweight)
+                {
+                    maxhealthyWeight = NormalWeightUpperLimit * (Math.Pow(totalHeightInMetres, 2));
+                    kgToLose = totalWeightInKgs - maxhealthyWeight;
+
+                    return "\nYour Current weight is " + totalWeightInKgs + "kg"
+                        + "\nIdeal maximum weight for someone " + totalHeightInMetres + "metres is " + maxhealthyWeight + "kg"
+                        + "\nMinimum weight in kilogramms to lose is " + kgToLose;
+                }
+                else if (currentCat == BMICategory.Underweight)
+                {
+                    maxhealthyWeight = NormalWeightUpperLimit * (Math.Pow(totalHeightInMetres, 2));
+                    kgToLose = maxhealthyWeight - totalWeightInKgs;
+
+                    return "\nYour Current weight is " + totalWeightInKgs + "kg"
+                        + "\nIdeal maximum weight for someone " + totalHeightInMetres + "metres is " + maxhealthyWeight + "kg"
+                        + "\nMaximum weight in kilogramms to put on is " + kgToLose;
+                }
+                else
+                {
+                    return "\nYou are a healthy weight";
                 }
             }
         }
