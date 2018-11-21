@@ -9,7 +9,7 @@
 //      the code is regenerated.
 //  </auto-generated>
 // ------------------------------------------------------------------------------
-#region Designer generated code
+/*#region Designer generated code
 #pragma warning disable
 namespace BmiCalculatorAcceptanceTests
 {
@@ -88,4 +88,4 @@ this.ScenarioSetup(scenarioInfo);
     }
 }
 #pragma warning restore
-#endregion
+#endregion*/
